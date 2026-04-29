@@ -1,16 +1,20 @@
 import api from "./api";
 
 export const getProducts = async () => {
-    await fetch("https://organic-zebra-9gg7xj4wvwh7w77-8080.app.github.dev/ecommerce/api/products")
-    .then(response => alert("OK"))
-    .catch(error => alert(error));
-    // try {
-    //     const response = await api.get("/products");
-    //     return response.data;
-    // } catch (error) {
-    //     console.error("Error fetching products:", error);
-    //     throw error;
-    // }
+    try {
+        const res = await fetch("/api/products", {
+            headers: {
+                Authorization: `Bearer ${localStorage.getItem("token") || ""}`,
+            }
+        });
+        if (!res.ok) {
+            throw new Error(`Error fetching products: ${res.statusText}`);
+        }
+        return res.json();
+    } catch (error) {
+        console.error("Error fetching products:", error);
+        throw error;
+    }
 };
 
 export const getProductById = async (id: string) => {
